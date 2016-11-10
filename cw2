@@ -1,0 +1,327 @@
+Task 1 
+Logistic regression
+
+a.
+> cor(Weekly[,-9])
+              Year         Lag1        Lag2        Lag3
+Year    1.00000000 -0.032289274 -0.03339001 -0.03000649
+Lag1   -0.03228927  1.000000000 -0.07485305  0.05863568
+Lag2   -0.03339001 -0.074853051  1.00000000 -0.07572091
+Lag3   -0.03000649  0.058635682 -0.07572091  1.00000000
+Lag4   -0.03112792 -0.071273876  0.05838153 -0.07539587
+Lag5   -0.03051910 -0.008183096 -0.07249948  0.06065717
+Volume  0.84194162 -0.064951313 -0.08551314 -0.06928771
+Today  -0.03245989 -0.075031842  0.05916672 -0.07124364
+               Lag4         Lag5      Volume        Today
+Year   -0.031127923 -0.030519101  0.84194162 -0.032459894
+Lag1   -0.071273876 -0.008183096 -0.06495131 -0.075031842
+Lag2    0.058381535 -0.072499482 -0.08551314  0.059166717
+Lag3   -0.075395865  0.060657175 -0.06928771 -0.071243639
+Lag4    1.000000000 -0.075675027 -0.06107462 -0.007825873
+Lag5   -0.075675027  1.000000000 -0.05851741  0.011012698
+Volume -0.061074617 -0.058517414  1.00000000 -0.033077783
+Today  -0.007825873  0.011012698 -0.03307778  1.000000000
+ 
+As can be seen from this output Year and Volume have very strong correlation between them. Unfortunately there seem to be no other good pairs. 
+Assuming this we create a plot with volume and year as x and y.
+> plot(Year, Volume, type="b")	
+
+ 
+b.
+> glm.fit = glm(Direction~Lag1+Lag2+Lag3+Lag4+Lag5+Volume, data=Weekly, family=binomial)
+> summary(glm.fit)
+
+Call:
+glm(formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + 
+    Volume, family = binomial, data = Weekly)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.6949  -1.2565   0.9913   1.0849   1.4579  
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)   
+(Intercept)  0.26686    0.08593   3.106   0.0019 **
+Lag1        -0.04127    0.02641  -1.563   0.1181   
+Lag2         0.05844    0.02686   2.175   0.0296 * 
+Lag3        -0.01606    0.02666  -0.602   0.5469   
+Lag4        -0.02779    0.02646  -1.050   0.2937   
+Lag5        -0.01447    0.02638  -0.549   0.5833   
+Volume      -0.02274    0.03690  -0.616   0.5377   
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 1496.2  on 1088  degrees of freedom
+Residual deviance: 1486.4  on 1082  degrees of freedom
+AIC: 1500.4
+
+Number of Fisher Scoring iterations: 4
+
+As can be seen Lag 2 (highlighted) seems to have certain type of influence on the model. 
+c.
+> glm.probs = predict(glm.fit, type="response")
+> glm.pred = rep("Down", 1089)
+> glm.pred[glm.probs>.5]="Up"
+> table(glm.pred, Direction)
+        Direction
+glm.pred Down  Up
+    Down   54  48
+    Up    430 557
+> 557/(557+48)
+[1] 0.9206612
+> 54/(430+54)
+[1] 0.1115702
+
+From the output we can deduct that this logistic regression model is going to be right the weeks market goes up 92% of the time. Alternatively it is going to be wrong 11% of the time.
+
+
+
+
+Task 2
+Logistic regression
+
+a.
+> attach(Auto)
+> median(Auto$mpg)
+[1] 22.75
+> mpg01 = rep(0, 392)
+> mpg01[mpg>22.75]=1
+> Auto_new = data.frame(mpg01, Auto)
+
+b.
+> cor(Auto_new[1:9])
+                  mpg01        mpg  cylinders displacement
+mpg01         1.0000000  0.8369392 -0.7591939   -0.7534766
+mpg           0.8369392  1.0000000 -0.7776175   -0.8051269
+cylinders    -0.7591939 -0.7776175  1.0000000    0.9508233
+displacement -0.7534766 -0.8051269  0.9508233    1.0000000
+horsepower   -0.6670526 -0.7784268  0.8429834    0.8972570
+weight       -0.7577566 -0.8322442  0.8975273    0.9329944
+acceleration  0.3468215  0.4233285 -0.5046834   -0.5438005
+year          0.4299042  0.5805410 -0.3456474   -0.3698552
+origin        0.5136984  0.5652088 -0.5689316   -0.6145351
+             horsepower     weight acceleration       year
+mpg01        -0.6670526 -0.7577566    0.3468215  0.4299042
+mpg          -0.7784268 -0.8322442    0.4233285  0.5805410
+cylinders     0.8429834  0.8975273   -0.5046834 -0.3456474
+displacement  0.8972570  0.9329944   -0.5438005 -0.3698552
+horsepower    1.0000000  0.8645377   -0.6891955 -0.4163615
+weight        0.8645377  1.0000000   -0.4168392 -0.3091199
+acceleration -0.6891955 -0.4168392    1.0000000  0.2903161
+year         -0.4163615 -0.3091199    0.2903161  1.0000000
+origin       -0.4551715 -0.5850054    0.2127458  0.1815277
+                 origin
+mpg01         0.5136984
+mpg           0.5652088
+cylinders    -0.5689316
+displacement -0.6145351
+horsepower   -0.4551715
+weight       -0.5850054
+acceleration  0.2127458
+year          0.1815277
+origin        1.0000000
+
+MPG01 seems to be most correlated with the cylinders, displacement and weight. MPG will be ignored in this scenario because it was used to create mpg01. 
+
+> plot(Auto_new$mpg01, Auto_new$cylinders)
+> plot(Auto_new$mpg01, Auto_new$displacement)
+> plot(Auto_new$mpg01, Auto_new$weight)
+
+
+
+   
+
+
+Task 3
+Validation set approach
+
+a.
+
+> attach(Default)
+> set.seed(11)
+> train = sample(10000,5000)
+> glm.fit.train = glm(formula=default_n~income+balance, family=binomial, data=Default, subset=train)
+
+
+
+
+b.
+
+> glm.probs=predict(glm.fit.train, type="response")
+> glm.pred=rep("No", 10000)
+> glm.pred[glm.probs>.5]="Yes"
+> table(glm.pred, Default$default)
+        
+glm.pred   No  Yes
+     No  9516  330
+     Yes  151    3
+> mean(glm.pred!=Default$default)
+[1] 0.0481
+
+Validation set error is around 4.8%
+
+c.
+
+> train = sample(10000,2500)
+> glm.fit.train = glm(formula=default_n~income+balance, family=binomial, data=Default, subset=train)
+> glm.probs=predict(glm.fit.train, type="response")
+> glm.pred=rep("No", 10000)
+> glm.pred[glm.probs>.5]="Yes"
+> table(glm.pred, Default$default)
+        
+glm.pred   No  Yes
+     No  9525  331
+     Yes  142    2
+> mean(glm.pred!=Default$default)
+[1] 0.0473
+
+> train = sample(10000,1250)
+> glm.fit.train = glm(formula=default_n~income+balance, family=binomial, data=Default, subset=train)
+> glm.probs=predict(glm.fit.train, type="response")
+> glm.pred=rep("No", 10000)
+> glm.pred[glm.probs>.5]="Yes"
+> table(glm.pred, Default$default)
+        
+glm.pred   No  Yes
+     No  9502  322
+     Yes  165   11
+> mean(glm.pred!=Default$default)
+[1] 0.0487
+
+It seems like changing the split does not have any particular effect on the result.
+
+
+
+
+
+d.
+> set.seed(11)
+> train = sample(10000,5000)
+> student_n = as.numeric(student)-1
+> glm.fit.train = glm(formula=default_n~income+balance+student_n, family=binomial, data=Default, subset=train)
+> glm.probs=predict(glm.fit.train, type="response")
+> glm.pred=rep("No", 10000)
+> glm.pred[glm.probs>.5]="Yes"
+> table(glm.pred, Default$default)
+        
+glm.pred   No  Yes
+     No  9511  329
+     Yes  156    4
+> mean(glm.pred!=Default$default)
+[1] 0.0485
+
+From the output it can be seen that the adding student variable does not significantly increase not decrease error rate. 
+
+Task 4
+LOOCV and Loop
+
+a.
+> set.seed(22)
+> attach(Weekly)
+> glm.fit = glm(Direction~Lag1 + Lag2, data=Weekly, family=binomial)
+
+b.
+> glm.fit = glm(Direction~Lag1 + Lag2, data=Weekly[-1,], family=binomial)
+
+c.
+> prediction_glm = predict.glm(glm.fit, Weekly[-1, ], type="response")>0.5
+> prediction_glm[1]
+   2 
+TRUE
+> Direction[1]
+[1] Down
+
+The prediction is TRUE i.e. “Up” while the true direction is “Down”.
+d.
+e.
+
+
+
+
+Task 5
+a.
+> set.seed(1)
+> x = rnorm(100)
+> y = x-2*x^2+rnorm(100)
+
+In this data set n = 100 and p = 2. The model will look like: y = x-2X2+eps
+b.
+> plot(x, y)
+ 
+
+It can be clearly seen that this is a quadratic function. Therefore x and y produce quadratic plot. 
+
+c.
+> set.seed(1)
+> library(boot)
+> quad_data = data.frame(x, y)
+> set.seed(1)
+> glm.fit = glm(y ~ x)  # i 
+> cv.glm(quad_data, glm.fit)$delta  
+[1] 7.288162 7.284744
+> 
+> glm.fit = glm(y ~ poly(x, 2)) # ii
+> cv.glm(quad_data, glm.fit)$delta
+
+[1] 0.9374236 0.9371789
+> glm.fit = glm(y ~ poly(x, 3)) # iii
+> cv.glm(quad_data, glm.fit)$delta
+[1] 0.9566218 0.9562538
+> glm.fit = glm(y ~ poly(x, 4)) # iv
+> cv.glm(quad_data, glm.fit)$delta
+[1] 0.9539049 0.9534453
+d.
+> set.seed(178)
+> 
+> glm.fit = glm(y ~ x)  # i 
+> cv.glm(quad_data, glm.fit)$delta  
+[1] 7.288162 7.284744
+> 
+> glm.fit = glm(y ~ poly(x, 2)) # ii
+> cv.glm(quad_data, glm.fit)$delta
+[1] 0.9374236 0.9371789
+> 
+> glm.fit = glm(y ~ poly(x, 3)) # iii
+> cv.glm(quad_data, glm.fit)$delta
+[1] 0.9566218 0.9562538
+> 
+> glm.fit = glm(y ~ poly(x, 4)) # iv
+> cv.glm(quad_data, glm.fit)$delta
+[1] 0.9539049 0.9534453
+
+The results are the same as with the different seed. It is because LOOCV fits the model n times. Doing this allows lower MSE as the splitting is based on one observation at a time. 
+
+e.
+The quadratic polynomial (power of 2) has the lowest error rate. This can be explained by the fact that this model matches the original plot of x and y (from question b). 
+
+f.
+> summary(glm.fit)
+
+Call:
+glm(formula = y ~ poly(x, 4))
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-2.0550  -0.6212  -0.1567   0.5952   2.2267  
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  -1.55002    0.09591 -16.162  < 2e-16 ***
+poly(x, 4)1   6.18883    0.95905   6.453 4.59e-09 ***
+poly(x, 4)2 -23.94830    0.95905 -24.971  < 2e-16 ***
+poly(x, 4)3   0.26411    0.95905   0.275    0.784    
+poly(x, 4)4   1.25710    0.95905   1.311    0.193    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for gaussian family taken to be 0.9197797)
+    Null deviance: 700.852  on 99  degrees of freedom
+Residual deviance:  87.379  on 95  degrees of freedom
+AIC: 282.3
+
+Number of Fisher Scoring iterations: 2
+
+As can be seen quadratic model (highlighted) seem to have certain type of influence on the model. 
