@@ -1,0 +1,327 @@
+Task 1 
+Basic Statistics
+
+a.
+First we need to create a variable containing the values from the 10 Birkbeck Students about their siblings.
+students_siblings = c(2,3,0,5,2,1,1,0,3,3)
+
+i)	Find the mean
+ii)	Find the median
+iii)	Find the mode
+iv)	Find the variance
+v)	Find the standard deviation 
+
+The mean is calculated using the mean () function. Mean equals to 2.
+mean(students_siblings)
+[1] 2
+
+The median was calculated using the median () function. Median equal to 2.
+median(students_siblings)
+[1] 2
+
+The mode was calculated by putting the values in a table and sorting them in the decreasing order. Then the first item of the table was taken. Mode equals to 3.
+names(sort(-table(students_siblings)))[1]
+[1] "3"
+
+Variance was calculated using a var () function. Variance equals to ~2.44
+var(students_siblings)
+[1] 2.444444
+
+Standard deviation was calculated using a sd () function. Standard deviation equals to ~1.56
+sd(students_siblings)
+[1] 1.563472
+
+b.
+Next we assign a variable to contain the data about student age.
+student_age = c(23,25,18,45,30,21,22,19,29,35)
+
+i)	Find the covariance and correlation between data sets                           student_siblings and student_age
+ii)	Is there a positive or negative or no correlation between the two?
+iii)	Is there causation between the two?
+
+The covariance is calculated using a cov () function. Covariance equals to ~11.8
+cov(student_age, students_siblings)
+[1] 11.88889
+
+The correlation is calculated using a cor () function. Correlation equals to ~0.91. This is a strong positive correlation.
+cor(students_siblings, student_age)
+[1] 0.9116971
+
+The value is positive therefore the values in first data set and second one increase together.  It means that the older the students are the more siblings they are likely to have.
+The possible explanation of such a relationship is that the parents of students who are older lived in a generation when having big families was a norm and they could afford it.      
+On the other hand parents of students who are younger had children in an age when lack of housing was starting to become a problem and possibly the general idea of having a big family was all forgotten. I can deduct that there is most likely a causation between the two.
+
+Task 2
+Getting familiar with R
+
+a.
+
+Boston data set consists of 506 rows and 14 columns. Columns represents certain aspects of    life in Boston suburbs. Each row is a separate suburb.
+
+> nrow(Boston)
+[1] 506
+> ncol(Boston)
+[1] 14
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+b.
+
+For the pairwise scatterplots I chose these pairs:
+1.	Indus-Nox. Indus is a proportion of non-retail business acres per town. Nox is nitrogen oxides concentration (parts per 10 million). 
+
+I believe that this pair shows that in suburbs with low industry the nitrogen oxides concentration are lower.
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+2.	Medv-Ptratio. Ptratio is a pupil-teacher ratio by town. Medv is a median value of owner-occupied homes in \$1000s.
+I believe this pair shows that in the suburbs with lots of cheap houses a number of pupils per teacher is higher than average.
+ 
+3.	Dis-Lstat. Dis is a weighted mean of distances to five Boston employment centers. Lstat is lower status of the population in percent.
+This pair, as I see shows that the suburbs that tend to have more (closer) employment centers if a decent percent (20-30%) of population of these suburbs is of a lower status. 
+ 
+
+
+c.
+
+To find out how and if predictors are associated with the crim predictor the following code was executed:
+> cor(Boston$crim, Boston)
+
+The output is:
+
+>              crim          
+crim     1.00000000 
+zn      -0.20046922  
+indus    0.40658341 
+chas    -0.05589158 
+nox      0.42097171 
+rm      -0.21924670 
+age      0.35273425 
+dis     -0.37967009  
+rad      0.62550515 
+tax      0.58276431 
+ptratio  0.28994558 
+black   -0.38506394 
+lstat    0.45562148 
+medv    -0.38830461 
+
+According to this data the strongest correlation is between crim-rad, crim-lstat and crim-tax with 0.62, 0.45 and 0.58 respectively. The possible explanation is that crime rate tends to be higher in the outskirts of the city (rad), in places with high percent of lower status population(lstat) and in places with high tax payers (tax).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+d.
+
+Suburbs with the highest crime rate per capita are 381, 419, 406, 411 and 415 with crime rates between 88.9 (highest) and 45.7 (lowest)
+Suburb No.	Crime rate per capita
+381	88.97620
+419	73.53410
+406	67.92080
+411	51.13580
+415	45.74610
+
+Suburbs with the highest tax rates are 491, 490, 489, 493 and 492 where per every $10, 000 $711 are a full-value property-tax.
+Suburb No.	Tax rate per $10,000
+491	
+
+711
+490	
+489	
+493	
+492	
+
+Suburbs with the highest pupil-teacher ratios are 365 and 355 with 22 pupils per teacher.
+ 
+Suburb No.	Pupil-teacher ratio
+356	22.0
+355	22.0
+
+e.
+
+There are 35 suburbs in Boston bound the Charles River. I used the table () function to calculate this. 
+> a = table(Boston$chas)
+> a
+
+  0   1 
+471  35 
+
+This piece of code shows that 471 suburbs are not bound to the river and 35 are.
+
+
+f.
+
+The median pupil-teacher ratio among the towns is 19.05. I used summary (function) to calculate this. 
+> summary(Boston$ptratio)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  12.60   17.40   19.05   18.46   20.20   22.00 
+
+
+g.
+
+The suburbs number 406 and 399 have the lowest median value of owner occupied houses with 5.0.
+	  crim	zn	indus	chas	nox	rm	age	dis	rad	tax	ptratio	black	lstat	medv
+406	67.92	0.0	18.10	0	0.693	5.68	100	1.43	24	666	20.2	384.97	22.98	5.0
+399	38.35	0.0	18.10	0	0.693	5.45	100	1.49	24	666	20.2	396.90	30.59	5.0
+
+The values of the predictors for these 2 suburbs were compared against the mean value of the predictors in the Boston data set. 
+	    crim	zn	  indus	chas	nox	 rm	  age	  dis	  rad	  tax	  ptratio	black	lstat	medv
+MEAN	3.61	11.36	11.13	1/0	0.55	6.28	68.57	3.79	9.54	408.2	18.45	356.67	12.65	22.53
+
+As a result I found out that these predictors are higher than average:
+•	Crime rates there are much higher than average, with suburb num. 406 having the 3rd and 399 the 7th the highest crime rates.
+•	Proportion of non-retail business acres per town is a bit higher than the mean that is 11.13.
+•	The nitrogen oxides concentration is higher than the mean of 0.55.
+•	The proportion of owner-occupied units built prior to 1940 is above average of 68.57.
+•	The index of accessibility to radial highways is way above average of 9.54.
+•	The full-value property-tax rate per $10,000 is higher than average of 408.23.
+•	The pupil-teacher ratio by town is also higher than average of 18.45.
+•	The proportion of blacks by town is higher than average of 356.67.
+•	The lower status of the population (percent) is higher than average of 12.65.
+And these predictors are below average:
+•	Proportion of residential land zoned for lots is way below the mean that is 11.36
+•	None of these suburbs are bound to the Charles River.
+•	The average number of rooms per dwelling is below average that is 6.28.
+•	Weighted mean of distances to employment centers is below average of 3.79.
+•	The median value of owner-occupied homes in $1000s is below average of 22.53
+
+h.
+
+To find out how many suburbs in Boston have more than 7 rooms per dwelling I executed the following code.
+table(Boston$rm > 7)
+
+FALSE  TRUE 
+  442    64 
+
+This shows us that 64 suburbs average more than 7 rooms per dwelling.
+The same was applied to find out how many suburbs average more than 8 rooms.
+table(Boston$rm > 8)
+
+FALSE  TRUE 
+  493    13 
+
+13 suburbs meet the requirements.
+The suburbs that average more than 8 rooms per dwelling also have lower percentage of lower status population and the median value of houses is much higher than the average. The crime rates there are also lower than average and 2 of the suburbs are bound to the Charles River.
+
+Task 3
+Linear Regression
+
+a.
+
+First the random seed is set to 1. 
+set.seed(1)
+
+Then we create vector X.
+x = rnorm(100, mean=0, sd=1)
+
+b.
+
+Creating vector eps.
+eps = rnorm(100, mean=0, s=0.25)
+
+
+
+
+c.
+
+Creating vector y. 
+y = -1 + 0.5 * x + eps
+
+Length of vector y is 100. 
+> length(y)
+[1] 100
+
+The beta_0 value in this model is -1 and the beta_1 value is 0.5.
+
+d.
+
+Creating scatterplot showing the relationship between x and y. 
+> plot(x~y)
+
+
+ 
+
+It can be seen from this model that x and y have a high positive correlation. This means that when x value increases y values increases as well.
+
+
+
+
+
+
+
+e.
+
+Fitting a least squares linear model
+> lm.fit_1 = lm(x~y)
+> summary(lm.fit_1)
+
+Call:
+lm(formula = x ~ y)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.90848 -0.28101  0.06274  0.24570  0.85736 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  1.59650    0.09074   17.59   <2e-16 ***
+y            1.55770    0.08395   18.56   <2e-16 ***
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.4249 on 98 degrees of freedom
+Multiple R-squared:  0.7784,	Adjusted R-squared:  0.7762 
+F-statistic: 344.3 on 1 and 98 DF,  p-value: < 2.2e-16
+
+
+The beta_0 value in this model is 1.59 and the beta_1 value is 1.55. Compared to the beta values from the first model it can be seen that both of them have increased.
+
+f.
+
+To obtain the least squares line the following code was executed:
+> abline(lm.fit_1)
+
+ 
