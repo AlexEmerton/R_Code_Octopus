@@ -1,3 +1,33 @@
+
+
+
+Introduction to
+ Data Analytics using R
+
+COURSEWORK 2
+
+
+
+
+Prepared for:
+Birkbeck University
+Tutor: Tingting Han
+
+Prepared by:
+Anvar Djumaev 
+adjuma01@mail.bbk.ac.uk
+
+
+15th of November 2016
+
+
+
+
+
+
+
+
+
 Task 1 
 Logistic regression
 
@@ -236,11 +266,19 @@ TRUE
 
 The prediction is TRUE i.e. “Up” while the true direction is “Down”.
 d.
+> test = rep(0, nrow(Weekly))
+> for (i in 1:nrow(Weekly)) {
++   glm.fit = glm(Direction ~ Lag1 + Lag2, data = Weekly[-i, ], family = binomial)
++   up_predict = predict.glm(glm.fit, Weekly[i, ], type = "response")> 0.5
++   real_up_chk = Weekly[i, ]$Direction == "Up"
++   if (up_predict != real_up_chk) 
++     test[i] = 1 }
+
 e.
+> mean(test)
+[1] 0.4499541
 
-
-
-
+The LOOCV test error rate is around 45%.
 Task 5
 a.
 > set.seed(1)
@@ -253,6 +291,12 @@ b.
  
 
 It can be clearly seen that this is a quadratic function. Therefore x and y produce quadratic plot. 
+
+
+
+
+
+
 
 c.
 > set.seed(1)
@@ -273,6 +317,8 @@ c.
 > glm.fit = glm(y ~ poly(x, 4)) # iv
 > cv.glm(quad_data, glm.fit)$delta
 [1] 0.9539049 0.9534453
+
+
 d.
 > set.seed(178)
 > 
@@ -294,8 +340,13 @@ d.
 
 The results are the same as with the different seed. It is because LOOCV fits the model n times. Doing this allows lower MSE as the splitting is based on one observation at a time. 
 
+
+
 e.
 The quadratic polynomial (power of 2) has the lowest error rate. This can be explained by the fact that this model matches the original plot of x and y (from question b). 
+
+
+
 
 f.
 > summary(glm.fit)
