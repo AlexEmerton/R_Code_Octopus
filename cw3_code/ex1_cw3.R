@@ -7,11 +7,11 @@ boston_var = ncol(Boston) - 1
 train = sample(1:nrow(Boston), nrow(Boston)/2)
 boston.test = Boston [-train ,"medv"]
 
-test.mse=rep(0,100)
-test.mse.half=rep(0, 100)
-test.mse.sqrt=rep(0, 100)
+test.mse=rep(0,500)
+test.mse.half=rep(0, 500)
+test.mse.sqrt=rep(0, 500)
 
-for(i in 1:100){
+for(i in 1:500){
   set.seed(100)
   bag.boston = randomForest(medv~., data=Boston, subset=train, mtry=boston_var, ntree = i, importance = TRUE)
   yhat.bag=predict(bag.boston,newdata=Boston[-train,])
@@ -26,7 +26,7 @@ for(i in 1:100){
   test.mse.sqrt[i]=mean((yhat.bag-boston.test)^2)
 }
 
-plot(test.mse,xlab="Number of Bootstrap Data Sets",ylab="Test Means Sum of Squares", type="l", col="coral2", ylim = c(10, 25))
+plot(test.mse,xlab="Number of Bootstrap Data Sets",ylab="Test Means Sum of Squares", type="l", col="coral2", ylim = c(10, 20))
 lines(test.mse.half, col="blueviolet", type="l")
 lines(test.mse.sqrt, col="forestgreen", type="l")
 
